@@ -7,7 +7,7 @@ class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         # Prepare request to the app-links/create endpoint
         api_url = f"{os.getenv('API_URL')}/app-links/create"
-        api_key = os.getenv('API_KEY')
+        api_key = os.getenv('OPACITY_API_KEY')
         
 
         # Use your provided templateId
