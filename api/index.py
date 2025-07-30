@@ -8,6 +8,7 @@ class handler(BaseHTTPRequestHandler):
         # Prepare request to the app-links/create endpoint
         api_url = f"{os.getenv('API_URL')}/app-links/create"
         api_key = os.getenv('API_KEY')
+        
 
         # Use your provided templateId
         payload = {
@@ -42,6 +43,8 @@ class handler(BaseHTTPRequestHandler):
         </head>
         <body>
             <h1>Opacity Ingest Test</h1>
+            <p>{api_key}</p>
+            <p>{api_url}</p>
             <p>Response from <code>/app-links/create</code>:</p>
             <pre>{pretty_json}</pre>
             <a href="/api/ingests">Go to Ingest Endpoint</a>
