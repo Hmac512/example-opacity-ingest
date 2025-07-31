@@ -30,7 +30,7 @@ class handler(BaseHTTPRequestHandler):
         pretty_json = json.dumps(resp_json, indent=2)
 
         # Extract URL from nested status.url if present
-        link_url = None
+        link_url = resp["data"]["url"]
         if isinstance(resp_json, dict) and "status" in resp_json:
             status_data = resp_json.get("status", {})
             if isinstance(status_data, dict):
