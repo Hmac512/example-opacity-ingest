@@ -31,15 +31,7 @@ class handler(BaseHTTPRequestHandler):
 
         # Extract URL from nested status.url if present
         link_url = resp["data"]["url"]
-        if isinstance(resp_json, dict) and "status" in resp_json:
-            status_data = resp_json.get("status", {})
-            if isinstance(status_data, dict):
-                link_url = status_data.get("url")
-
-        # Fallback link if not found
-        if not link_url:
-            link_url = "/api/ingests"
-
+        
         # Build HTML
         html_content = f"""
         <!DOCTYPE html>
