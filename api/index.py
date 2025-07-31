@@ -3,14 +3,14 @@ import json
 import requests
 import os
 
+
 class handler(BaseHTTPRequestHandler):
     def do_GET(self):
         # Prepare request to the app-links/create endpoint
         api_url = f"{os.getenv('API_URL')}/app-links/create"
         api_key = os.getenv('OPACITY_API_KEY')
-        
 
-        # Use your provided templateId
+        # Payload with your provided templateId
         payload = {
             "apiKey": api_key,
             "templateId": "c8f98b35-bf1b-4af7-9a83-527428f0e185",
@@ -19,17 +19,28 @@ class handler(BaseHTTPRequestHandler):
             }
         }
 
-        # Make POST request to Opacity API
+        # Make POST request
         try:
             resp = requests.post(api_url, json=payload, headers={"Content-Type": "application/json"})
             resp_json = resp.json()
         except Exception as e:
             resp_json = {"error": str(e)}
 
-        # Pretty-print JSON response
+        # Pretty-print JSON
         pretty_json = json.dumps(resp_json, indent=2)
 
-        # Build HTML page
+        # Extract URL from nested status.url if present
+        link_url = None
+        if isinstance(resp_json, dict) and "status" in resp_json:
+            status_data = resp_json.get("status", {})
+            if isinstance(status_data, dict):
+                link_url = status_data.get("url")
+
+        # Fallback link if not found
+        if not link_url:
+            link_url = "/api/ingests"
+
+        # Build HTML
         html_content = f"""
         <!DOCTYPE html>
         <html>
@@ -43,11 +54,9 @@ class handler(BaseHTTPRequestHandler):
         </head>
         <body>
             <h1>Opacity Ingest Test</h1>
-            <p>{api_key}</p>
-            <p>{api_url}</p>
             <p>Response from <code>/app-links/create</code>:</p>
             <pre>{pretty_json}</pre>
-            <a href="/api/ingests">Go to Ingest Endpoint</a>
+            <a href="{link_url}">Open Generated Link</a>
         </body>
         </html>
         """
@@ -56,4 +65,4 @@ class handler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
-        self.wfile.write(html_content.encode())
+        self.wfile.write(html_conten
