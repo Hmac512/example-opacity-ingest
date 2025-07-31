@@ -30,7 +30,7 @@ class handler(BaseHTTPRequestHandler):
         pretty_json = json.dumps(resp_json, indent=2)
 
         # Extract URL from nested status.url if present
-        link_url = resp["data"]["url"]
+        link_url = resp_json["data"]["url"]
         
         # Build HTML
         html_content = f"""
